@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import seaborn as sns
 """a = np.array([2,4,6,8])
 b = np.array([1,3,5,7],)
 print(a*b)
@@ -104,7 +105,7 @@ df = pd.DataFrame(m,columns=["var1","var2","var3"])
 print(df)
 #print(df[0:2][["var1","var3"]])
 print(df[df.var1 > 15]["var1"])
-print(df[(df.var1 > 15) & (df.var3 < 10)]) """
+print(df[(df.var1 > 15) & (df.var3 < 10)]) 
 #birleştirme(join) işlemleri
 m = np.random.randint(1,30,size=(5,3))
 df1 = pd.DataFrame(m,columns=["var1","var2","var3"])
@@ -113,9 +114,57 @@ df2 = df1 + 99
 print(df2)
 print(pd.concat([df1, df2],ignore_index=False))
 print(pd.concat([df1, df2],ignore_index=True))
+#ileri seviye birleştirme işlemleri(birebir birleştirme)
+df1 = pd.DataFrame({"çalisanlar":["ali","veli","ayse","fatma"],
+                    "grup":["muhasebe","muhendislik","muhendislik","ik"]})
+df2 = pd.DataFrame({"çalisanlar":["ayse","ali","veli","fatma"],
+                    "ilk_giris":[2010,2009,2014,2019]})
+print(df1)
+print(df2)
+print(pd.merge(df1,df2)) #merge ile iki listede çalışanlar grubu ortak oldugu için ona göre birleştirdi.
+print(pd.merge(df1,df2,on="çalisanlar")) #on etiketi ile neye göre birleştirecegini seçmiş olduk.
+df3 = pd.merge(df1,df2)
+print("DF3:",df3)
+df4 = pd.DataFrame({"grup":["muhasebe","muhendislik","ik"],
+                    "mudur":["Caner","Mustafa","Berkcan"]})
+print(df4)
+print(pd.merge(df3,df4)) #df3 4 degerden df4 3 degerden oluşmasına ragmen grup nesnesine göre sıralamıştır.
+#çoktan çoka sıralama
+df5 = pd.DataFrame({"grup":["muhasebe","muhasebe","muhendislik","muhendislik","ik","ik"],
+                    "yetenekler":["matematik","excel","kodlama","linux","excel","yonetim"]})
+print(pd.merge(df1,df5)) #birleştirme işlemleri ile birden fazla yetenegi olan kişiler çoklamıştır.
+##Toplulaştırma ve Gruplama(Aggregation and Grouping)
+df = sns.load_dataset("planets") #sns kütüphanesinden planets eklenmiştir
+print(df.head())
+print(df.shape)
+print(df.mean())
+print(df["mass"].mean())
+print(df["mass"].count())
+print(df.describe()) #yukarıda tek tek baktıgımız bilgilere tek satırda bakmamıza yarıyor!
+print(df.describe().T) #tersini alır transpoz
+print(df.dropna().describe())
+#Gruplama işlemleri
+df = pd.DataFrame({"gruplar":["A","B","C","A","B","C"],
+                   "veri":[10,11,52,23,43,55]},columns=["gruplar","veri"])
+print(df)
+print(df.groupby("gruplar").mean()) #groupby ile gruplar nesnesini yakalar, mean ile ayrı ayrı a,b,c gruplarının ortalamasını alır.
+#mesela iki tane A grubu var degerleri 10 ve 23 toplayıp ikiye böldü.
 
-
-
+df_planets = sns.load_dataset("planets")
+print(df_planets)
+print(df_planets.groupby("method")["orbital_period"].mean())  #method grubuna gidip orbital_period degişkinine göre ortalamasını bulmuştur.
+print(df_planets.groupby("method")["orbital_period"].describe())"""
+#İleri toplulaştırma işlemleri (Aggregate,filter,transfrom,apply)
+df = pd.DataFrame({"gruplar":["A","B","C","A","B","C"],
+                    "degisken1":[10,23,33,22,11,99],
+                     "degisken2":[100,253,333,262,111,969]},
+                      columns=["gruplar","degisken1","degisken2"])
+print(df)
+#aggregate
+print(df.groupby("gruplar").aggregate(["min",np.median,"max"])) #grupları hedef alarak min np.median ve max ı kendisi ayrı olarak hesaplar.
+#örnek olarak A grubu için min median ve max hesaplar.
+print(df.groupby("gruplar").aggregate({"degisken1":"min","degisken2":"max"})) #gruplar nesnesini ele alarak degisken1 için min degisken2 için
+# max hesapla.
 
 
 
