@@ -153,7 +153,7 @@ print(df.groupby("gruplar").mean()) #groupby ile gruplar nesnesini yakalar, mean
 df_planets = sns.load_dataset("planets")
 print(df_planets)
 print(df_planets.groupby("method")["orbital_period"].mean())  #method grubuna gidip orbital_period degişkinine göre ortalamasını bulmuştur.
-print(df_planets.groupby("method")["orbital_period"].describe())"""
+print(df_planets.groupby("method")["orbital_period"].describe())
 #İleri toplulaştırma işlemleri (Aggregate,filter,transfrom,apply)
 df = pd.DataFrame({"gruplar":["A","B","C","A","B","C"],
                     "degisken1":[10,23,33,22,11,99],
@@ -164,7 +164,18 @@ print(df)
 print(df.groupby("gruplar").aggregate(["min",np.median,"max"])) #grupları hedef alarak min np.median ve max ı kendisi ayrı olarak hesaplar.
 #örnek olarak A grubu için min median ve max hesaplar.
 print(df.groupby("gruplar").aggregate({"degisken1":"min","degisken2":"max"})) #gruplar nesnesini ele alarak degisken1 için min degisken2 için
-# max hesapla.
+# max hesapla."""
+#####filtreleme
+df = pd.DataFrame({"gruplar":["A","B","C","A","B","C"],
+                    "degisken1":[10,23,33,22,11,99],
+                     "degisken2":[100,253,333,262,111,969]},
+                      columns=["gruplar","degisken1","degisken2"])
+def filter_func(x):
+    return x["degisken1"].std() > 9 #std ---> standart sapma
+print(df)
+print(df.groupby("gruplar").std())
+print(df.groupby("gruplar").filter(filter_func))
+
 
 
 
