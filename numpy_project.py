@@ -164,8 +164,8 @@ print(df)
 print(df.groupby("gruplar").aggregate(["min",np.median,"max"])) #grupları hedef alarak min np.median ve max ı kendisi ayrı olarak hesaplar.
 #örnek olarak A grubu için min median ve max hesaplar.
 print(df.groupby("gruplar").aggregate({"degisken1":"min","degisken2":"max"})) #gruplar nesnesini ele alarak degisken1 için min degisken2 için
-# max hesapla."""
-#####filtreleme
+# max hesapla.
+#####Filtreleme
 df = pd.DataFrame({"gruplar":["A","B","C","A","B","C"],
                     "degisken1":[10,23,33,22,11,99],
                      "degisken2":[100,253,333,262,111,969]},
@@ -175,6 +175,38 @@ def filter_func(x):
 print(df)
 print(df.groupby("gruplar").std())
 print(df.groupby("gruplar").filter(filter_func))
+#Transform
+df = pd.DataFrame({"gruplar":["A","B","C","A","B","C"],
+                    "degisken1":[10,23,33,22,11,99],
+                     "degisken2":[100,253,333,262,111,969]},
+                      columns=["gruplar","degisken1","degisken2"])
+print(df)
+df_a = df.iloc[:,1:3] #DataFrame içinde bulunan A,B,C degişkenlerine matematiksel işlem yapılamadıgı için iloc kullanarak bu hatadan kurtarıldı.
+#iloc ile tüm satırları aldı ve 1 ve 3 e kadar sütun seçti A,B,C seçilmemiştir böylece.
+print(df_a)
+print(df_a.transform(lambda x: x-x.mean())) #lamba ayrı bir fonksiyon oluşturmadan parantez içinde fonksiyon oluşturmak için kullanılır.
+#transform fonk belirli bir dönüştürme fonksiyonları için nesneler için kullanılır.
+#Apply kullanımı
+df = pd.DataFrame({"degisken1":[10,23,33,22,11,99],
+                     "degisken2":[100,253,333,262,111,969]},
+                      columns=["degisken1","degisken2"])
+print(df.apply(np.sum))
+#pivot tablolar
+titanic = sns.load_dataset("titanic")
+print(titanic.head())
+print(titanic.groupby(["sex","class"])[["survived"]].aggregate("mean").unstack())
+#pivot ile oluşturulması
+print(titanic.pivot_table("survived",columns="class", index="sex"))
+age = pd.cut(titanic["age"],[0,18,90]).head()
+print(pd.cut(titanic["age"],[0,18,90]).head())
+#titanic.pivot_table("survived",["sex",age],"class")"""
+#txt excel dosya okuma
+#print(pd.read_csv("ornekcsv.csv",sep=";"))
+#print(pd.read_csv("duz_metin.txt"))
+#print(pd.read_excel("ornekx.xlsx"))
+
+
+
 
 
 
